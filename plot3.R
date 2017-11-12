@@ -1,0 +1,15 @@
+library(data.table)
+library(lattice)
+library(ggplot2)
+power_full <- fread("~/4 - Data Analysis/household_power_consumption.txt", header = TRUE, sep = ";", na.strings="?",stringsAsFactors = FALSE)
+power <-rbind(power_full[power_full$Date=="1/2/2007",],power_full[power_full$Date=="2/2/2007",])
+power$Date <- as.Date(power$Date,"%d/%m/%Y")
+power$DateTime <- as.POSIXct(paste(power$Date, power$Time), format="%Y-%m-%d %H:%M:%S")
+
+#plot3
+#png(filename = "plot3.png")
+with(power, {plot(Sub_metering_1 ~ DateTime, type="l", xlab= "", ylab="Energy Sub Metering")})
+lines(power$Sub_metering_2 ~ power$DateTime, col = 'Red')
+lines(power$Sub_metering_3 ~ power$DateTime, col = 'Blue')
+legend("topright", lty=1, lwd =3, col=c("black","red","blue") ,legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+#dev.off()
